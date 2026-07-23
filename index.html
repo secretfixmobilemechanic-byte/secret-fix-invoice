@@ -1,0 +1,2798 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Secret Fix">
+  <meta name="description" content="Free offline invoice maker for Secret Fix Mobile Mechanic.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="app-icon.png">
+  <title>Secret Fix Invoice Maker</title>
+  <style>
+    html { background: #020203; color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      background: #020203;
+    }
+    @media (display-mode: standalone) {
+      body { overscroll-behavior-y: contain; }
+    }
+  </style>
+</head>
+<body>
+<!--
+  SECRET FIX INVOICE MAKER
+  Paste this entire block into a Custom HTML / Embed Code element.
+  Upload the two files in secret-fix-assets/ and update the two image src paths
+  below if your website builder assigns different media URLs.
+  No external libraries or JavaScript dependencies are required.
+-->
+<div id="sf-invoice-maker">
+  <style>
+    #sf-invoice-maker {
+      --sf-red: #ff1717;
+      --sf-red-dark: #9f0505;
+      --sf-red-glow: rgba(255, 23, 23, 0.28);
+      --sf-bg: #050505;
+      --sf-panel: #0a0a0b;
+      --sf-panel-2: #101012;
+      --sf-line: #4b4b50;
+      --sf-line-hot: #7c1111;
+      --sf-text: #f4f4f5;
+      --sf-muted: #aaaab0;
+      --sf-input: #0c0c0e;
+      --sf-radius: 14px;
+      position: relative;
+      color: var(--sf-text);
+      font-family: "Arial Narrow", "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+      line-height: 1.45;
+      width: 100%;
+      background:
+        radial-gradient(circle at 12% 4%, rgba(255, 0, 0, 0.13), transparent 24rem),
+        radial-gradient(circle at 96% 30%, rgba(180, 0, 0, 0.12), transparent 28rem),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 8px),
+        #020203;
+      border: 1px solid #2c2c30;
+      border-radius: 18px;
+      box-sizing: border-box;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #sf-invoice-maker::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      background:
+        linear-gradient(rgba(2,2,3,0.84), rgba(2,2,3,0.9)),
+        url("secret-fix-assets/secret-fix-skull.png") calc(100% + 150px) 17% / 620px auto no-repeat,
+        url("secret-fix-assets/secret-fix-skull.png") -170px 73% / 480px auto no-repeat,
+        radial-gradient(circle at 8% 24%, rgba(255,0,0,0.2) 0 2px, transparent 3px),
+        radial-gradient(circle at 93% 61%, rgba(255,0,0,0.18) 0 2px, transparent 3px),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 10px),
+        #030304;
+      background-attachment: scroll;
+      opacity: 0.92;
+      pointer-events: none;
+    }
+
+    #sf-invoice-maker::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      background:
+        repeating-radial-gradient(ellipse at 0 0, transparent 0 22px, rgba(255,0,0,0.02) 23px 24px),
+        linear-gradient(90deg, rgba(255,0,0,0.025), transparent 18%, transparent 82%, rgba(255,0,0,0.025));
+      pointer-events: none;
+    }
+
+    #sf-invoice-maker *,
+    #sf-invoice-maker *::before,
+    #sf-invoice-maker *::after {
+      box-sizing: border-box;
+    }
+
+    #sf-invoice-maker button,
+    #sf-invoice-maker input,
+    #sf-invoice-maker select,
+    #sf-invoice-maker textarea {
+      font: inherit;
+    }
+
+    #sf-invoice-maker .sf-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: clamp(12px, 2.2vw, 26px);
+    }
+
+    #sf-invoice-maker .sf-hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(220px, 0.72fr);
+      gap: 18px clamp(24px, 5vw, 56px);
+      align-items: center;
+      padding: clamp(24px, 4.5vw, 48px) clamp(20px, 5vw, 58px) 22px;
+      overflow: hidden;
+      border-bottom: 2px solid #680808;
+      background:
+        radial-gradient(circle at 81% 34%, rgba(228, 0, 0, 0.2), transparent 28%),
+        linear-gradient(108deg, rgba(13,13,14,0.94), rgba(0,0,0,0.99)),
+        #050506;
+    }
+
+    #sf-invoice-maker .sf-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(154deg, transparent 0 11px, rgba(255,255,255,0.018) 11px 12px),
+        repeating-linear-gradient(26deg, transparent 0 31px, rgba(255,0,0,0.025) 31px 33px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    #sf-invoice-maker .sf-hero::after {
+      content: "";
+      position: absolute;
+      right: -8%;
+      bottom: -94px;
+      width: 70%;
+      height: 160px;
+      transform: rotate(-5deg);
+      background: radial-gradient(ellipse, rgba(255, 0, 0, 0.36), transparent 68%);
+      pointer-events: none;
+    }
+
+    #sf-invoice-maker .sf-brand-art {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+    }
+
+    #sf-invoice-maker .sf-wordmark {
+      display: block;
+      width: 100%;
+      max-width: 760px;
+      height: auto;
+      filter:
+        drop-shadow(0 8px 7px rgba(0,0,0,0.8))
+        drop-shadow(0 0 16px rgba(255,0,0,0.11));
+    }
+
+    #sf-invoice-maker .sf-skull-stage {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      min-height: 250px;
+      place-items: center;
+    }
+
+    #sf-invoice-maker .sf-skull-stage::before {
+      content: "";
+      position: absolute;
+      width: 86%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,0.19);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(135,0,0,0.25) 0 46%, transparent 47%),
+        repeating-conic-gradient(from 0deg, rgba(255,255,255,0.08) 0 2deg, transparent 2deg 18deg);
+      box-shadow:
+        0 0 0 8px rgba(0,0,0,0.56),
+        0 0 0 9px rgba(255,0,0,0.2),
+        0 0 52px rgba(255,0,0,0.26);
+    }
+
+    #sf-invoice-maker .sf-skull {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: min(100%, 340px);
+      height: auto;
+      filter:
+        drop-shadow(0 13px 12px rgba(0,0,0,0.82))
+        drop-shadow(0 0 20px rgba(255,0,0,0.18));
+    }
+
+    #sf-invoice-maker .sf-contact {
+      position: relative;
+      z-index: 1;
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px 28px;
+      align-items: center;
+      margin: 0;
+      padding-top: 16px;
+      color: #dddde0;
+      border-top: 1px solid rgba(255,255,255,0.18);
+      font-size: 0.9rem;
+      font-style: normal;
+    }
+
+    #sf-invoice-maker .sf-contact a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    #sf-invoice-maker .sf-contact a:hover {
+      color: #fff;
+    }
+
+    #sf-invoice-maker .sf-contact-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #sf-invoice-maker .sf-contact-icon {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 auto;
+      color: #fff;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), transparent),
+        linear-gradient(145deg, #d30d0d, #730000);
+      border: 1px solid #ff4343;
+      border-radius: 50%;
+      box-shadow:
+        inset 0 0 0 3px rgba(0,0,0,0.3),
+        0 0 18px rgba(255, 0, 0, 0.2);
+    }
+
+    #sf-invoice-maker .sf-card {
+      position: relative;
+      margin-top: 12px;
+      padding: clamp(13px, 2vw, 21px);
+      background:
+        radial-gradient(circle at 96% 6%, rgba(116,0,0,0.12), transparent 28%),
+        repeating-linear-gradient(132deg, transparent 0 9px, rgba(255,255,255,0.012) 9px 10px),
+        linear-gradient(145deg, rgba(16,16,18,0.99), rgba(3,3,4,0.99));
+      border: 1px solid #55555a;
+      border-radius: var(--sf-radius);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.025),
+        inset 0 -24px 50px rgba(0,0,0,0.24),
+        0 16px 42px rgba(0,0,0,0.3);
+      content-visibility: auto;
+      contain-intrinsic-size: auto 360px;
+    }
+
+    #sf-invoice-maker .sf-card::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(255,255,255,0.025);
+      border-radius: calc(var(--sf-radius) - 5px);
+      pointer-events: none;
+    }
+
+    #sf-invoice-maker .sf-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-section-title::before {
+      content: "";
+      width: 5px;
+      height: 23px;
+      background: var(--sf-red);
+      border-radius: 3px;
+      box-shadow: 0 0 12px var(--sf-red-glow);
+    }
+
+    #sf-invoice-maker .sf-section-title::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(90deg, rgba(255,0,0,0.5), rgba(255,255,255,0.08), transparent);
+    }
+
+    #sf-invoice-maker .sf-two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.75fr);
+      gap: 20px;
+    }
+
+    #sf-invoice-maker .sf-two-column > section + section {
+      padding-left: 20px;
+      border-left: 1px solid #5c5c61;
+    }
+
+    #sf-invoice-maker .sf-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    #sf-invoice-maker .sf-span-12 { grid-column: span 12; }
+    #sf-invoice-maker .sf-span-8 { grid-column: span 8; }
+    #sf-invoice-maker .sf-span-7 { grid-column: span 7; }
+    #sf-invoice-maker .sf-span-6 { grid-column: span 6; }
+    #sf-invoice-maker .sf-span-5 { grid-column: span 5; }
+    #sf-invoice-maker .sf-span-4 { grid-column: span 4; }
+    #sf-invoice-maker .sf-span-3 { grid-column: span 3; }
+
+    #sf-invoice-maker .sf-field {
+      min-width: 0;
+    }
+
+    #sf-invoice-maker label,
+    #sf-invoice-maker .sf-label {
+      display: block;
+      margin-bottom: 6px;
+      color: #c8c8cc;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker input,
+    #sf-invoice-maker select,
+    #sf-invoice-maker textarea {
+      width: 100%;
+      min-height: 42px;
+      color: #fff;
+      background: var(--sf-input);
+      border: 1px solid #69696e;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    }
+
+    #sf-invoice-maker input,
+    #sf-invoice-maker select {
+      padding: 9px 11px;
+    }
+
+    #sf-invoice-maker textarea {
+      min-height: 92px;
+      padding: 11px;
+      resize: vertical;
+    }
+
+    #sf-invoice-maker input::placeholder,
+    #sf-invoice-maker textarea::placeholder {
+      color: #707077;
+      opacity: 1;
+    }
+
+    #sf-invoice-maker input:hover,
+    #sf-invoice-maker select:hover,
+    #sf-invoice-maker textarea:hover {
+      border-color: #96969b;
+    }
+
+    #sf-invoice-maker input:focus-visible,
+    #sf-invoice-maker select:focus-visible,
+    #sf-invoice-maker textarea:focus-visible,
+    #sf-invoice-maker button:focus-visible {
+      border-color: var(--sf-red);
+      box-shadow: 0 0 0 3px rgba(255, 23, 23, 0.22);
+    }
+
+    #sf-invoice-maker input[type="checkbox"] {
+      width: 20px;
+      min-height: 20px;
+      accent-color: var(--sf-red);
+    }
+
+    #sf-invoice-maker .sf-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #c9c9ce;
+      font-size: 0.86rem;
+    }
+
+    #sf-invoice-maker .sf-checkbox label {
+      margin: 0;
+      font-size: inherit;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    #sf-invoice-maker .sf-vin-wrap {
+      min-width: 0;
+    }
+
+    #sf-invoice-maker .sf-input-upload-wrap,
+    #sf-invoice-maker .sf-vin-input-wrap {
+      position: relative;
+    }
+
+    #sf-invoice-maker .sf-input-upload-wrap > input:not([type="file"]),
+    #sf-invoice-maker .sf-vin-input-wrap > input:not([type="file"]) {
+      padding-right: 46px;
+    }
+
+    #sf-invoice-maker .sf-vin-input-wrap > input:not([type="file"]) {
+      padding-right: 96px;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-vin-count {
+      position: absolute;
+      right: 47px;
+      bottom: 11px;
+      color: #98989f;
+      font-size: 0.72rem;
+      pointer-events: none;
+    }
+
+    #sf-invoice-maker .sf-photo-control {
+      min-width: 0;
+    }
+
+    #sf-invoice-maker .sf-camera-button {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      right: 5px;
+      display: grid;
+      width: 32px;
+      height: 32px;
+      margin: 0;
+      padding: 0;
+      place-items: center;
+      color: #ff2a2a;
+      background: linear-gradient(145deg, #1b090a, #09090a);
+      border: 1px solid #9e1717;
+      border-radius: 5px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025);
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+
+    #sf-invoice-maker .sf-camera-button svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    #sf-invoice-maker .sf-camera-button:hover {
+      color: #fff;
+      background: #3a0b0d;
+      border-color: var(--sf-red);
+    }
+
+    #sf-invoice-maker .sf-camera-button:focus-visible {
+      outline: none;
+      border-color: var(--sf-red);
+      box-shadow: 0 0 0 3px rgba(255,23,23,0.22);
+    }
+
+    #sf-invoice-maker .sf-file-meta {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 7px;
+      margin-top: 5px;
+      color: #cfcfd3;
+      font-size: 0.74rem;
+    }
+
+    #sf-invoice-maker .sf-file-meta[hidden] {
+      display: none !important;
+    }
+
+    #sf-invoice-maker .sf-file-icon {
+      display: inline-grid;
+      width: 22px;
+      height: 25px;
+      flex: 0 0 auto;
+      place-items: center;
+      color: #fff;
+      background: #860707;
+      border: 1px solid #ff3030;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      font-weight: 900;
+    }
+
+    #sf-invoice-maker .sf-file-name {
+      max-width: min(100%, 280px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    #sf-invoice-maker .sf-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #5b5b60;
+      border-radius: 7px;
+    }
+
+    #sf-invoice-maker table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      color: #e9e9eb;
+    }
+
+    #sf-invoice-maker th {
+      padding: 10px 12px;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(135,0,0,0.95), rgba(215,0,0,0.72)),
+        var(--sf-red-dark);
+      border-right: 1px solid rgba(255,255,255,0.22);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker th:nth-child(n+2),
+    #sf-invoice-maker td:nth-child(n+2) {
+      text-align: center;
+    }
+
+    #sf-invoice-maker td {
+      padding: 7px;
+      background: rgba(4,4,5,0.86);
+      border-top: 1px solid #3e3e42;
+      border-right: 1px solid #323236;
+    }
+
+    #sf-invoice-maker td:last-child,
+    #sf-invoice-maker th:last-child {
+      border-right: 0;
+    }
+
+    #sf-invoice-maker td input {
+      min-height: 36px;
+      padding: 6px 8px;
+      border-color: transparent;
+      background: #0a0a0c;
+      text-align: inherit;
+    }
+
+    #sf-invoice-maker .sf-total-cell {
+      min-width: 100px;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    #sf-invoice-maker .sf-remove-row {
+      width: 34px;
+      min-width: 34px;
+      height: 34px;
+      padding: 0;
+      color: #ff6666;
+      background: transparent;
+      border: 1px solid #6d2020;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #sf-invoice-maker .sf-remove-row:hover {
+      color: #fff;
+      background: #8f0808;
+      border-color: var(--sf-red);
+    }
+
+    #sf-invoice-maker .sf-quantity-control {
+      display: grid;
+      grid-template-columns: 32px minmax(44px, 1fr) 32px;
+      gap: 4px;
+      align-items: center;
+      min-width: 120px;
+    }
+
+    #sf-invoice-maker .sf-quantity-control input {
+      min-width: 0;
+      padding-inline: 3px;
+      text-align: center;
+      -moz-appearance: textfield;
+    }
+
+    #sf-invoice-maker .sf-quantity-control input::-webkit-inner-spin-button,
+    #sf-invoice-maker .sf-quantity-control input::-webkit-outer-spin-button {
+      margin: 0;
+      -webkit-appearance: none;
+    }
+
+    #sf-invoice-maker .sf-quantity-button {
+      width: 32px;
+      height: 34px;
+      padding: 0;
+      color: #fff;
+      background: #151518;
+      border: 1px solid #55555b;
+      border-radius: 5px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    #sf-invoice-maker .sf-quantity-button:hover,
+    #sf-invoice-maker .sf-quantity-button:focus-visible {
+      background: #2a1113;
+      border-color: var(--sf-red);
+    }
+
+    #sf-invoice-maker .sf-empty-row td {
+      padding: 18px 12px;
+      color: var(--sf-muted);
+      text-align: center !important;
+      font-style: italic;
+    }
+
+    #sf-invoice-maker .sf-inline-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    #sf-invoice-maker .sf-button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 15px;
+      color: #fff;
+      background: #121216;
+      border: 1px solid #55555b;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+
+    #sf-invoice-maker .sf-button:hover {
+      transform: translateY(-1px);
+      border-color: var(--sf-red);
+      background: #1c1113;
+    }
+
+    #sf-invoice-maker .sf-button-primary {
+      background: linear-gradient(135deg, #e41010, #7f0000);
+      border-color: #ff3333;
+      box-shadow: 0 8px 22px rgba(255,0,0,0.15);
+    }
+
+    #sf-invoice-maker .sf-financial-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.8fr);
+      gap: 13px;
+      margin-top: 12px;
+    }
+
+    #sf-invoice-maker .sf-summary {
+      align-self: start;
+      overflow: hidden;
+      border: 1px solid #5c5c61;
+      border-radius: 8px;
+      background: #050506;
+    }
+
+    #sf-invoice-maker .sf-summary-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 130px;
+      min-height: 41px;
+      align-items: center;
+      border-bottom: 1px solid var(--sf-line-hot);
+    }
+
+    #sf-invoice-maker .sf-summary-row > span,
+    #sf-invoice-maker .sf-summary-row > label {
+      margin: 0;
+      padding: 9px 13px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-summary-row output {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 9px 13px;
+      border-left: 1px solid var(--sf-line-hot);
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #sf-invoice-maker .sf-summary-row input {
+      min-height: 41px;
+      height: 100%;
+      border: 0;
+      border-left: 1px solid var(--sf-line-hot);
+      border-radius: 0;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #sf-invoice-maker .sf-grand-total {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 16px;
+      background:
+        linear-gradient(100deg, rgba(126,0,0,0.96), rgba(238,0,0,0.78)),
+        #a00000;
+    }
+
+    #sf-invoice-maker .sf-grand-total span {
+      font-size: clamp(1rem, 2.3vw, 1.35rem);
+      font-weight: 900;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-grand-total output {
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    #sf-invoice-maker .sf-policy-grid,
+    #sf-invoice-maker .sf-signature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    #sf-invoice-maker .sf-policy {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      padding: 14px;
+      border: 1px solid #55555a;
+      border-radius: 9px;
+      background: rgba(7,7,8,0.82);
+    }
+
+    #sf-invoice-maker .sf-policy-mark {
+      color: var(--sf-red);
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    #sf-invoice-maker .sf-policy h3 {
+      margin: 0 0 5px;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-policy textarea {
+      min-height: 76px;
+      padding: 0;
+      color: #bfbfc4;
+      background: transparent;
+      border: 0;
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+
+    #sf-invoice-maker .sf-signature {
+      position: relative;
+      padding: 11px;
+      border: 1px solid #55555a;
+      border-radius: 9px;
+      background: rgba(7,7,8,0.84);
+    }
+
+    #sf-invoice-maker .sf-signature-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    #sf-invoice-maker .sf-signature-head span {
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-signature-clear {
+      color: #ff6b6b;
+      background: transparent;
+      border: 0;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    #sf-invoice-maker .sf-signature canvas {
+      width: 100%;
+      height: 112px;
+      display: block;
+      touch-action: none;
+      background:
+        linear-gradient(#111115, #09090b),
+        #09090b;
+      border: 1px solid #4c4c52;
+      border-radius: 5px;
+      cursor: crosshair;
+    }
+
+    #sf-invoice-maker .sf-signature-hint {
+      margin: 7px 0 0;
+      color: #85858d;
+      font-size: 0.7rem;
+    }
+
+    #sf-invoice-maker .sf-footer {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 13px;
+      align-items: center;
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid #4a4a4f;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(27,5,7,0.86), rgba(7,7,8,0.94));
+    }
+
+    #sf-invoice-maker .sf-tagline {
+      color: #fff;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 1000;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    #sf-invoice-maker .sf-tagline span {
+      color: var(--sf-red);
+    }
+
+    #sf-invoice-maker .sf-action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    #sf-invoice-maker .sf-status {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #a8e4b8;
+      font-size: 0.78rem;
+      text-align: right;
+    }
+
+    #sf-invoice-maker .sf-screen-reader {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media (max-width: 850px) {
+      #sf-invoice-maker .sf-hero {
+        grid-template-columns: minmax(0, 1fr) minmax(170px, 0.42fr);
+        align-items: center;
+      }
+
+      #sf-invoice-maker .sf-skull-stage {
+        min-height: 210px;
+      }
+
+      #sf-invoice-maker .sf-two-column,
+      #sf-invoice-maker .sf-financial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #sf-invoice-maker .sf-two-column > section + section {
+        padding-top: 16px;
+        padding-left: 0;
+        border-top: 1px solid #5c5c61;
+        border-left: 0;
+      }
+
+      #sf-invoice-maker .sf-footer {
+        grid-template-columns: 1fr;
+      }
+
+      #sf-invoice-maker .sf-action-bar {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 620px) {
+      #sf-invoice-maker {
+        border-radius: 0;
+      }
+
+      #sf-invoice-maker .sf-shell,
+      #sf-invoice-maker .sf-hero {
+        padding: 12px;
+      }
+
+      #sf-invoice-maker .sf-card {
+        padding: 12px;
+      }
+
+      #sf-invoice-maker .sf-hero {
+        grid-template-columns: 1fr;
+      }
+
+      #sf-invoice-maker .sf-wordmark {
+        max-width: 520px;
+        margin: 0 auto;
+      }
+
+      #sf-invoice-maker .sf-skull-stage {
+        min-height: 178px;
+        margin-top: -10px;
+      }
+
+      #sf-invoice-maker .sf-skull-stage::before {
+        width: 178px;
+      }
+
+      #sf-invoice-maker .sf-skull {
+        width: min(68%, 220px);
+      }
+
+      #sf-invoice-maker .sf-contact {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 9px;
+      }
+
+      #sf-invoice-maker .sf-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #sf-invoice-maker .sf-grid > * {
+        grid-column: 1 / -1 !important;
+      }
+
+      #sf-invoice-maker .sf-policy-grid,
+      #sf-invoice-maker .sf-signature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #sf-invoice-maker .sf-table-wrap {
+        overflow: visible;
+        border: 0;
+      }
+
+      #sf-invoice-maker table,
+      #sf-invoice-maker tbody,
+      #sf-invoice-maker tr,
+      #sf-invoice-maker td {
+        display: block;
+        width: 100%;
+        min-width: 0;
+      }
+
+      #sf-invoice-maker thead {
+        display: none;
+      }
+
+      #sf-invoice-maker tbody {
+        display: grid;
+        gap: 9px;
+      }
+
+      #sf-invoice-maker tbody tr {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+        padding: 9px;
+        background: #070708;
+        border: 1px solid #4b4b50;
+        border-radius: 8px;
+      }
+
+      #sf-invoice-maker tbody td {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        text-align: left !important;
+      }
+
+      #sf-invoice-maker tbody td:first-child {
+        grid-column: 1 / -1;
+      }
+
+      #sf-invoice-maker tbody td::before {
+        display: block;
+        margin: 0 0 5px;
+        color: #a9a9af;
+        font-size: 0.66rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      #sf-invoice-maker tbody td:nth-child(1)::before { content: "Description"; }
+      #sf-invoice-maker tbody td:nth-child(2)::before { content: "Qty"; }
+      #sf-invoice-maker tbody td:nth-child(3)::before { content: "Unit price"; }
+      #sf-invoice-maker tbody td:nth-child(4)::before { content: "Labor hrs"; }
+      #sf-invoice-maker tbody td:nth-child(5)::before { content: "Labor cost"; }
+      #sf-invoice-maker tbody td:nth-child(6)::before { content: "Total"; }
+
+      #sf-invoice-maker tbody tr.sf-empty-row {
+        display: block;
+      }
+
+      #sf-invoice-maker tbody tr.sf-empty-row td {
+        display: block;
+      }
+
+      #sf-invoice-maker tbody tr.sf-empty-row td::before {
+        display: none;
+      }
+
+      #sf-invoice-maker .sf-total-cell {
+        display: flex;
+        min-height: 58px;
+        flex-direction: column;
+        justify-content: center;
+        padding: 6px 8px;
+        border: 1px solid #3c3c41;
+        border-radius: 5px;
+      }
+
+      #sf-invoice-maker .sf-remove-cell {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+      }
+
+      #sf-invoice-maker .sf-remove-cell::before {
+        display: none;
+      }
+
+      #sf-invoice-maker .sf-summary-row {
+        grid-template-columns: minmax(0, 1fr) 116px;
+      }
+
+      #sf-invoice-maker .sf-action-bar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #sf-invoice-maker .sf-button {
+        width: 100%;
+      }
+
+      #sf-invoice-maker::after {
+        display: none;
+      }
+
+      #sf-invoice-maker .sf-card {
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025), 0 8px 22px rgba(0,0,0,0.22);
+      }
+
+      #sf-invoice-maker .sf-camera-button {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #sf-invoice-maker *,
+      #sf-invoice-maker *::before,
+      #sf-invoice-maker *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.25in;
+      }
+
+      body {
+        margin: 0 !important;
+        background: #fff !important;
+      }
+
+      body * {
+        visibility: hidden !important;
+      }
+
+      #sf-invoice-maker,
+      #sf-invoice-maker * {
+        visibility: visible !important;
+      }
+
+      #sf-invoice-maker {
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: 100% !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      #sf-invoice-maker .sf-shell {
+        max-width: none;
+        padding: 10px;
+      }
+
+      #sf-invoice-maker .sf-hero {
+        grid-template-columns: minmax(0, 1fr) 180px;
+        padding: 18px 22px;
+      }
+
+      #sf-invoice-maker .sf-skull-stage {
+        min-height: 160px;
+      }
+
+      #sf-invoice-maker .sf-skull {
+        width: 170px;
+      }
+
+      #sf-invoice-maker .sf-contact {
+        display: flex;
+      }
+
+      #sf-invoice-maker .sf-card {
+        break-inside: avoid;
+        margin-top: 10px;
+        padding: 13px;
+        box-shadow: none;
+      }
+
+      #sf-invoice-maker .sf-two-column {
+        grid-template-columns: minmax(0, 1.55fr) minmax(240px, 0.75fr);
+      }
+
+      #sf-invoice-maker .sf-two-column > section + section {
+        padding-top: 0;
+        padding-left: 20px;
+        border-top: 0;
+        border-left: 1px solid #5c5c61;
+      }
+
+      #sf-invoice-maker .sf-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+      }
+
+      #sf-invoice-maker .sf-grid > .sf-span-12 { grid-column: span 12 !important; }
+      #sf-invoice-maker .sf-grid > .sf-span-8 { grid-column: span 8 !important; }
+      #sf-invoice-maker .sf-grid > .sf-span-7 { grid-column: span 7 !important; }
+      #sf-invoice-maker .sf-grid > .sf-span-6 { grid-column: span 6 !important; }
+      #sf-invoice-maker .sf-grid > .sf-span-5 { grid-column: span 5 !important; }
+      #sf-invoice-maker .sf-grid > .sf-span-4 { grid-column: span 4 !important; }
+      #sf-invoice-maker .sf-grid > .sf-span-3 { grid-column: span 3 !important; }
+
+      #sf-invoice-maker .sf-policy-grid,
+      #sf-invoice-maker .sf-signature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #sf-invoice-maker .sf-table-wrap {
+        overflow: visible;
+        border: 1px solid #5b5b60;
+      }
+
+      #sf-invoice-maker table {
+        display: table;
+        min-width: 0;
+      }
+
+      #sf-invoice-maker thead {
+        display: table-header-group;
+      }
+
+      #sf-invoice-maker tbody {
+        display: table-row-group;
+      }
+
+      #sf-invoice-maker tbody tr {
+        display: table-row;
+        padding: 0;
+        background: transparent;
+        border: 0;
+      }
+
+      #sf-invoice-maker tbody td {
+        display: table-cell;
+        width: auto;
+        padding: 5px;
+        background: rgba(4,4,5,0.86);
+        border-top: 1px solid #3e3e42;
+        border-right: 1px solid #323236;
+        text-align: center !important;
+      }
+
+      #sf-invoice-maker tbody td:first-child {
+        grid-column: auto;
+        text-align: left !important;
+      }
+
+      #sf-invoice-maker tbody td::before {
+        display: none !important;
+      }
+
+      #sf-invoice-maker .sf-total-cell {
+        min-height: 0;
+        border-radius: 0;
+      }
+
+      #sf-invoice-maker .sf-action-bar,
+      #sf-invoice-maker .sf-inline-actions,
+      #sf-invoice-maker .sf-status,
+      #sf-invoice-maker .sf-signature-clear,
+      #sf-invoice-maker .sf-remove-cell,
+      #sf-invoice-maker .sf-signature-hint {
+        display: none !important;
+      }
+
+      #sf-invoice-maker input,
+      #sf-invoice-maker select,
+      #sf-invoice-maker textarea {
+        color: #fff !important;
+      }
+
+      #sf-invoice-maker .sf-footer {
+        display: block;
+        padding: 12px 16px;
+      }
+    }
+
+    /* A measured off-screen Letter sheet is used by both Print and Export PDF. */
+    #sf-print-stage {
+      position: fixed;
+      z-index: 2147483647;
+      top: 0;
+      left: -20000px;
+      width: 768px;
+      height: 1008px;
+      overflow: hidden;
+      visibility: hidden;
+      background: #020203;
+      pointer-events: none;
+    }
+
+    #sf-print-stage #sf-invoice-maker.sf-print-sheet {
+      position: relative !important;
+      inset: auto !important;
+      width: 1120px !important;
+      max-width: none !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      font-size: 12px !important;
+      line-height: 1.25 !important;
+      transform: scale(var(--sf-print-scale, 1));
+      transform-origin: top left;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-hero {
+      grid-template-columns: minmax(0, 1fr) 190px !important;
+      gap: 10px 22px !important;
+      padding: 14px 20px 10px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-wordmark {
+      max-width: 610px !important;
+      margin: 0 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-skull-stage {
+      min-height: 138px !important;
+      margin: 0 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-skull-stage::before {
+      width: 145px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-skull {
+      width: 145px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-contact {
+      display: flex !important;
+      gap: 8px 22px !important;
+      padding-top: 7px !important;
+      font-size: 10px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-contact-icon {
+      width: 22px !important;
+      height: 22px !important;
+      font-size: 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-shell {
+      max-width: none !important;
+      padding: 7px 10px 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-card {
+      margin-top: 6px !important;
+      padding: 8px 10px !important;
+      border-radius: 8px !important;
+      box-shadow: none !important;
+      break-inside: avoid;
+      content-visibility: visible !important;
+      contain-intrinsic-size: none !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-card::before {
+      display: none !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-section-title {
+      gap: 7px !important;
+      margin-bottom: 7px !important;
+      font-size: 12px !important;
+      letter-spacing: 0.1em !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-section-title::before {
+      width: 4px !important;
+      height: 17px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-two-column {
+      grid-template-columns: minmax(0, 1.55fr) minmax(245px, 0.75fr) !important;
+      gap: 16px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-two-column > section + section {
+      padding-top: 0 !important;
+      padding-left: 16px !important;
+      border-top: 0 !important;
+      border-left: 1px solid #5c5c61 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-grid {
+      grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+      gap: 7px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-12 { grid-column: span 12 !important; }
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-8 { grid-column: span 8 !important; }
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-7 { grid-column: span 7 !important; }
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-6 { grid-column: span 6 !important; }
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-5 { grid-column: span 5 !important; }
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-4 { grid-column: span 4 !important; }
+    #sf-print-stage #sf-invoice-maker .sf-grid > .sf-span-3 { grid-column: span 3 !important; }
+
+    #sf-print-stage #sf-invoice-maker label,
+    #sf-print-stage #sf-invoice-maker .sf-label {
+      margin-bottom: 3px !important;
+      font-size: 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker input,
+    #sf-print-stage #sf-invoice-maker select {
+      min-height: 28px !important;
+      height: 28px !important;
+      padding: 4px 7px !important;
+      font-size: 11px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-vin-count {
+      right: 7px !important;
+      bottom: 7px !important;
+      font-size: 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-print-textarea {
+      min-height: 34px;
+      padding: 6px 7px;
+      color: #fff;
+      background: var(--sf-input);
+      border: 1px solid #69696e;
+      border-radius: 4px;
+      font-size: 10px;
+      line-height: 1.28;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-camera-button {
+      display: none !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-input-upload-wrap > input:not([type="file"]),
+    #sf-print-stage #sf-invoice-maker .sf-vin-input-wrap > input:not([type="file"]) {
+      padding-right: 7px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-file-meta {
+      font-size: 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-file-icon {
+      width: 16px !important;
+      height: 18px !important;
+      font-size: 7px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-table-wrap {
+      overflow: visible !important;
+      border: 1px solid #5b5b60 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker table {
+      display: table !important;
+      min-width: 0 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker thead { display: table-header-group !important; }
+    #sf-print-stage #sf-invoice-maker tbody { display: table-row-group !important; }
+
+    #sf-print-stage #sf-invoice-maker tbody tr {
+      display: table-row !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker tbody td {
+      display: table-cell !important;
+      width: auto !important;
+      padding: 3px !important;
+      background: rgba(4,4,5,0.86) !important;
+      border-top: 1px solid #3e3e42 !important;
+      border-right: 1px solid #323236 !important;
+      text-align: center !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker tbody td:first-child {
+      grid-column: auto !important;
+      text-align: left !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker tbody td::before {
+      display: none !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker th {
+      padding: 5px 7px !important;
+      font-size: 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker td input {
+      min-height: 23px !important;
+      height: 23px !important;
+      padding: 3px 5px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-quantity-control {
+      display: block !important;
+      min-width: 0 !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-quantity-button {
+      display: none !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-financial-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.8fr) !important;
+      gap: 9px !important;
+      margin-top: 8px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-summary-row {
+      min-height: 27px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-summary-row > span,
+    #sf-print-stage #sf-invoice-maker .sf-summary-row > label,
+    #sf-print-stage #sf-invoice-maker .sf-summary-row output {
+      padding: 5px 8px !important;
+      font-size: 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-summary-row input {
+      min-height: 27px !important;
+      height: 27px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-grand-total {
+      padding: 7px 9px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-grand-total span {
+      font-size: 14px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-grand-total output {
+      font-size: 19px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-policy-grid,
+    #sf-print-stage #sf-invoice-maker .sf-signature-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 8px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-policy,
+    #sf-print-stage #sf-invoice-maker .sf-signature {
+      padding: 8px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-policy-mark {
+      font-size: 24px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-policy h3 {
+      margin-bottom: 3px !important;
+      font-size: 10px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-print-signature-image {
+      display: block;
+      width: 100%;
+      height: 54px;
+      object-fit: contain;
+      background: #09090b;
+      border: 1px solid #4c4c52;
+      border-radius: 4px;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-footer {
+      display: block !important;
+      margin-top: 6px !important;
+      padding: 8px 11px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-tagline {
+      font-size: 13px !important;
+    }
+
+    #sf-print-stage #sf-invoice-maker .sf-action-bar,
+    #sf-print-stage #sf-invoice-maker .sf-inline-actions,
+    #sf-print-stage #sf-invoice-maker .sf-status,
+    #sf-print-stage #sf-invoice-maker .sf-signature-clear,
+    #sf-print-stage #sf-invoice-maker .sf-signature-hint,
+    #sf-print-stage #sf-invoice-maker .sf-remove-cell {
+      display: none !important;
+    }
+
+    body.sf-print-preview {
+      margin: 0;
+      background: #fff;
+    }
+
+    body.sf-print-preview > #sf-invoice-maker {
+      display: none !important;
+    }
+
+    body.sf-print-preview #sf-print-stage {
+      position: relative;
+      top: auto;
+      left: auto;
+      display: block;
+      margin: 0 auto;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    @media print {
+      @page {
+        size: Letter portrait;
+        margin: 0.25in;
+      }
+
+      html,
+      body {
+        width: 8.5in !important;
+        height: 11in !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        background: #fff !important;
+      }
+
+      body > *:not(#sf-print-stage) {
+        display: none !important;
+      }
+
+      #sf-invoice-maker:not(.sf-print-sheet),
+      #sf-invoice-maker:not(.sf-print-sheet) * {
+        visibility: hidden !important;
+      }
+
+      #sf-print-stage,
+      #sf-print-stage * {
+        visibility: visible !important;
+      }
+
+      #sf-print-stage {
+        position: fixed !important;
+        inset: 0 auto auto 0 !important;
+        display: block !important;
+        width: 8in !important;
+        height: 10.5in !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        background: #020203 !important;
+      }
+
+      #sf-print-stage #sf-invoice-maker.sf-print-sheet {
+        transform: scale(var(--sf-print-scale, 0.65)) !important;
+        transform-origin: top left !important;
+      }
+    }
+  </style>
+
+  <header class="sf-hero">
+    <div class="sf-brand-art">
+      <h1 class="sf-screen-reader">Secret Fix Mobile Mechanic Service Invoice</h1>
+      <img
+        class="sf-wordmark"
+        src="secret-fix-assets/secret-fix-logo.png"
+        width="1024"
+        height="316"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        alt="Secret Fix Mobile Mechanic"
+      >
+    </div>
+    <div class="sf-skull-stage" aria-hidden="true">
+      <img
+        class="sf-skull"
+        src="secret-fix-assets/secret-fix-skull.png"
+        width="713"
+        height="677"
+        loading="eager"
+        decoding="async"
+        alt=""
+      >
+    </div>
+    <address class="sf-contact">
+      <div class="sf-contact-row">
+        <span class="sf-contact-icon" aria-hidden="true">&#9742;</span>
+        <a href="tel:+14804108488">480-410-8488</a>
+      </div>
+      <div class="sf-contact-row">
+        <span class="sf-contact-icon" aria-hidden="true">&#9993;</span>
+        <a href="mailto:Support@secretfix.net">Support@secretfix.net</a>
+      </div>
+    </address>
+  </header>
+
+  <form class="sf-shell" data-sf-form novalidate>
+    <div class="sf-card">
+      <div class="sf-two-column">
+        <section aria-labelledby="sf-customer-title">
+          <h2 class="sf-section-title" id="sf-customer-title">Customer information</h2>
+          <div class="sf-grid">
+            <div class="sf-field sf-span-6">
+              <label for="sf-customer-name">Customer name</label>
+              <input id="sf-customer-name" name="customerName" autocomplete="name" placeholder="Full name">
+            </div>
+            <div class="sf-field sf-span-6">
+              <label for="sf-phone">Phone</label>
+              <input id="sf-phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555">
+            </div>
+            <div class="sf-field sf-span-12">
+              <label for="sf-email">Email</label>
+              <input id="sf-email" name="email" type="email" autocomplete="email" placeholder="customer@example.com">
+            </div>
+            <div class="sf-field sf-span-12">
+              <label for="sf-address">Address</label>
+              <input id="sf-address" name="address" autocomplete="street-address" placeholder="Street address">
+            </div>
+            <div class="sf-field sf-span-8">
+              <label for="sf-city">City</label>
+              <input id="sf-city" name="city" autocomplete="address-level2">
+            </div>
+            <div class="sf-field sf-span-4">
+              <label for="sf-zip">ZIP</label>
+              <input id="sf-zip" name="zip" inputmode="numeric" autocomplete="postal-code">
+            </div>
+            <div class="sf-field sf-span-12">
+              <label for="sf-license">Driver license number</label>
+              <div class="sf-photo-control">
+                <div class="sf-input-upload-wrap">
+                  <input id="sf-license" name="driverLicense" autocomplete="off">
+                  <label class="sf-camera-button" for="sf-license-photo" title="Add driver's license photo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6 10 4h4l1.5 2H19a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h3.5Z"/><circle cx="12" cy="13" r="4"/></svg>
+                    <span class="sf-screen-reader">Add driver's license photo</span>
+                  </label>
+                </div>
+                <input class="sf-screen-reader" id="sf-license-photo" type="file" accept="image/*" capture="environment" data-sf-file-input>
+                <span class="sf-file-meta" data-sf-file-meta hidden>
+                  <span class="sf-file-icon" aria-hidden="true">&#128196;</span>
+                  <span class="sf-file-name" data-sf-file-name></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="sf-invoice-title">
+          <h2 class="sf-section-title" id="sf-invoice-title">Invoice details</h2>
+          <div class="sf-grid">
+            <div class="sf-field sf-span-12">
+              <label for="sf-invoice-number">Invoice number</label>
+              <input id="sf-invoice-number" name="invoiceNumber" autocomplete="off" required>
+            </div>
+            <div class="sf-field sf-span-12">
+              <label for="sf-invoice-date">Date</label>
+              <input id="sf-invoice-date" name="invoiceDate" type="date" required>
+            </div>
+            <div class="sf-field sf-span-12">
+              <label for="sf-due-date">Due date</label>
+              <input id="sf-due-date" name="dueDate" type="date">
+            </div>
+            <div class="sf-field sf-span-12">
+              <label for="sf-po">Vehicle / PO</label>
+              <input id="sf-po" name="purchaseOrder" autocomplete="off" placeholder="Optional reference">
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <section class="sf-card" aria-labelledby="sf-vehicle-title">
+      <h2 class="sf-section-title" id="sf-vehicle-title">Vehicle information</h2>
+      <div class="sf-grid">
+        <div class="sf-field sf-span-3">
+          <label for="sf-year">Year</label>
+          <select id="sf-year" name="vehicleYear">
+            <option value="">Select year</option>
+          </select>
+        </div>
+        <div class="sf-field sf-span-3">
+          <label for="sf-make">Make</label>
+          <select id="sf-make" name="vehicleMake">
+            <option value="">Select make</option>
+            <option>Acura</option><option>Audi</option><option>BMW</option><option>Buick</option>
+            <option>Cadillac</option><option>Chevrolet</option><option>Chrysler</option><option>Dodge</option>
+            <option>Ford</option><option>GMC</option><option>Honda</option><option>Hyundai</option>
+            <option>Infiniti</option><option>Jeep</option><option>Kia</option><option>Lexus</option>
+            <option>Lincoln</option><option>Mazda</option><option>Mercedes-Benz</option><option>Mitsubishi</option>
+            <option>Nissan</option><option>Ram</option><option>Subaru</option><option>Tesla</option>
+            <option>Toyota</option><option>Volkswagen</option><option>Volvo</option><option>Other</option>
+          </select>
+        </div>
+        <div class="sf-field sf-span-3">
+          <label for="sf-model">Model</label>
+          <input id="sf-model" name="vehicleModel" placeholder="Model">
+        </div>
+        <div class="sf-field sf-span-3">
+          <label for="sf-engine">Engine</label>
+          <input id="sf-engine" name="vehicleEngine" placeholder="Engine / trim">
+        </div>
+        <div class="sf-field sf-span-6 sf-vin-wrap">
+          <label for="sf-vin">VIN &mdash; 17 characters max</label>
+          <div class="sf-photo-control">
+            <div class="sf-vin-input-wrap">
+              <input id="sf-vin" name="vin" maxlength="17" autocomplete="off" spellcheck="false">
+              <span class="sf-vin-count" data-sf-vin-count>0 / 17</span>
+              <label class="sf-camera-button" for="sf-vin-photo" title="Add VIN photo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6 10 4h4l1.5 2H19a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h3.5Z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span class="sf-screen-reader">Add VIN photo</span>
+              </label>
+            </div>
+            <input class="sf-screen-reader" id="sf-vin-photo" type="file" accept="image/*" capture="environment" data-sf-file-input>
+            <span class="sf-file-meta" data-sf-file-meta hidden>
+              <span class="sf-file-icon" aria-hidden="true">&#128196;</span>
+              <span class="sf-file-name" data-sf-file-name></span>
+            </span>
+          </div>
+        </div>
+        <div class="sf-field sf-span-3">
+          <label for="sf-plate">License plate</label>
+          <input id="sf-plate" name="licensePlate" autocomplete="off">
+        </div>
+        <div class="sf-field sf-span-3">
+          <label for="sf-mileage">Mileage</label>
+          <div class="sf-photo-control">
+            <div class="sf-input-upload-wrap">
+              <input id="sf-mileage" name="mileage" inputmode="numeric" autocomplete="off">
+              <label class="sf-camera-button" for="sf-mileage-photo" title="Add mileage photo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6 10 4h4l1.5 2H19a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h3.5Z"/><circle cx="12" cy="13" r="4"/></svg>
+                <span class="sf-screen-reader">Add mileage photo</span>
+              </label>
+            </div>
+            <input class="sf-screen-reader" id="sf-mileage-photo" type="file" accept="image/*" capture="environment" data-sf-file-input>
+            <span class="sf-file-meta" data-sf-file-meta hidden>
+              <span class="sf-file-icon" aria-hidden="true">&#128196;</span>
+              <span class="sf-file-name" data-sf-file-name></span>
+            </span>
+          </div>
+        </div>
+        <div class="sf-field sf-span-12">
+          <label for="sf-diagnosis">Diagnosis / outcome</label>
+          <textarea id="sf-diagnosis" name="diagnosis" placeholder="Customer concern, inspection findings, work performed, and outcome"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="sf-card" aria-labelledby="sf-services-title">
+      <h2 class="sf-section-title" id="sf-services-title">Services &amp; labor</h2>
+      <div class="sf-table-wrap">
+        <table>
+          <caption class="sf-screen-reader">Invoice service and labor line items</caption>
+          <thead>
+            <tr>
+              <th scope="col">Description</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Unit price</th>
+              <th scope="col">Labor hrs</th>
+              <th scope="col">Labor cost</th>
+              <th scope="col">Total</th>
+              <th scope="col" class="sf-remove-cell"><span class="sf-screen-reader">Remove</span></th>
+            </tr>
+          </thead>
+          <tbody data-sf-items></tbody>
+        </table>
+      </div>
+      <div class="sf-inline-actions">
+        <button class="sf-button" type="button" data-sf-add-row><span aria-hidden="true">+</span> Add line item</button>
+        <span data-sf-item-count aria-live="polite">0 items</span>
+      </div>
+
+      <div class="sf-financial-grid">
+        <div class="sf-grid">
+          <div class="sf-field sf-span-12">
+            <label for="sf-technician-notes">Notes / technician notes</label>
+            <textarea id="sf-technician-notes" name="technicianNotes" placeholder="Recommendations, declined work, follow-up details, or payment notes"></textarea>
+          </div>
+          <div class="sf-field sf-span-12">
+            <label for="sf-parts-used">Parts used</label>
+            <textarea id="sf-parts-used" name="partsUsed" placeholder="Part names, numbers, quantities, and warranty notes"></textarea>
+          </div>
+        </div>
+
+        <div class="sf-summary" aria-label="Invoice totals">
+          <div class="sf-summary-row">
+            <span>Subtotal</span>
+            <output data-sf-subtotal>$0.00</output>
+          </div>
+          <input id="sf-tax" name="taxRate" type="hidden" value="7.9">
+          <div class="sf-summary-row">
+            <span>Tax</span>
+            <output data-sf-tax-total>$0.00</output>
+          </div>
+          <div class="sf-summary-row">
+            <label for="sf-supplies">Shop supplies</label>
+            <input id="sf-supplies" name="shopSupplies" type="text" inputmode="decimal" value="0">
+          </div>
+          <div class="sf-summary-row">
+            <label for="sf-discount">Discount</label>
+            <input id="sf-discount" name="discount" type="text" inputmode="decimal" value="0">
+          </div>
+          <div class="sf-grand-total">
+            <span>Grand total</span>
+            <output data-sf-grand-total aria-live="polite">$0.00</output>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sf-card" aria-label="Warranty and terms">
+      <div class="sf-policy-grid">
+        <div class="sf-policy">
+          <div class="sf-policy-mark" aria-hidden="true">&#9826;</div>
+          <div>
+            <h3>Warranty</h3>
+            <label class="sf-screen-reader" for="sf-warranty">Warranty terms</label>
+            <textarea id="sf-warranty" name="warranty">All labor is warranted for 30 days or 1,000 miles (whichever comes first).</textarea>
+          </div>
+        </div>
+        <div class="sf-policy">
+          <div class="sf-policy-mark" aria-hidden="true">&#9783;</div>
+          <div>
+            <h3>Terms &amp; conditions</h3>
+            <label class="sf-screen-reader" for="sf-terms">Terms and conditions</label>
+            <textarea id="sf-terms" name="terms">Half payment is due upfront before work begins. Customer authorizes the work described and agrees to be responsible for payment in full.</textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sf-card" aria-labelledby="sf-signatures-title">
+      <h2 class="sf-section-title" id="sf-signatures-title">Signatures</h2>
+      <div class="sf-signature-grid">
+        <div class="sf-signature">
+          <div class="sf-signature-head">
+            <span>Customer signature</span>
+            <button type="button" class="sf-signature-clear" data-sf-clear-signature="customer">Clear</button>
+          </div>
+          <canvas data-sf-signature="customer" aria-label="Customer signature pad"></canvas>
+          <p class="sf-signature-hint">Sign using a mouse, finger, or stylus.</p>
+          <div class="sf-field" style="margin-top: 10px;">
+            <label for="sf-customer-sign-date">Date</label>
+            <input id="sf-customer-sign-date" name="customerSignatureDate" type="date">
+          </div>
+        </div>
+        <div class="sf-signature">
+          <div class="sf-signature-head">
+            <span>Technician signature</span>
+            <button type="button" class="sf-signature-clear" data-sf-clear-signature="technician">Clear</button>
+          </div>
+          <canvas data-sf-signature="technician" aria-label="Technician signature pad"></canvas>
+          <p class="sf-signature-hint">Sign using a mouse, finger, or stylus.</p>
+          <div class="sf-field" style="margin-top: 10px;">
+            <label for="sf-tech-sign-date">Date</label>
+            <input id="sf-tech-sign-date" name="technicianSignatureDate" type="date">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sf-footer">
+      <div class="sf-tagline">We come to you. <span>You relax, we fix.</span></div>
+      <div>
+        <div class="sf-action-bar" aria-label="Invoice actions">
+          <button class="sf-button" type="button" data-sf-save>Save Draft</button>
+          <button class="sf-button sf-button-primary" type="button" data-sf-pdf>Export PDF</button>
+          <button class="sf-button" type="button" data-sf-send>&#10148; Send via Gmail</button>
+          <button class="sf-button" type="button" data-sf-clear>Clear</button>
+        </div>
+        <div class="sf-status" data-sf-status role="status" aria-live="polite"></div>
+      </div>
+    </footer>
+  </form>
+
+  <template data-sf-row-template>
+    <tr>
+      <td><input data-sf-description aria-label="Line item description" placeholder="Service or part description"></td>
+      <td>
+        <div class="sf-quantity-control">
+          <button class="sf-quantity-button" type="button" data-sf-qty-decrease aria-label="Decrease quantity">&minus;</button>
+          <input data-sf-quantity aria-label="Quantity" type="number" inputmode="numeric" min="1" step="1" value="1">
+          <button class="sf-quantity-button" type="button" data-sf-qty-increase aria-label="Increase quantity">+</button>
+        </div>
+      </td>
+      <td><input data-sf-unit-price aria-label="Unit price" type="text" inputmode="decimal" placeholder="0.00"></td>
+      <td>
+        <div class="sf-quantity-control">
+          <button class="sf-quantity-button" type="button" data-sf-hours-decrease aria-label="Decrease labor hours by half an hour">&minus;</button>
+          <input data-sf-hours aria-label="Labor hours" type="number" inputmode="decimal" min="0" step="0.5" value="1">
+          <button class="sf-quantity-button" type="button" data-sf-hours-increase aria-label="Increase labor hours by half an hour">+</button>
+        </div>
+      </td>
+      <td><input data-sf-labor-cost aria-label="Labor cost" type="text" inputmode="decimal" placeholder="0.00"></td>
+      <td class="sf-total-cell"><output data-sf-row-total>$0.00</output></td>
+      <td class="sf-remove-cell">
+        <button class="sf-remove-row" type="button" data-sf-remove-row aria-label="Remove line item">&times;</button>
+      </td>
+    </tr>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var root = document.getElementById('sf-invoice-maker');
+      if (!root || root.dataset.ready === 'true') return;
+      root.dataset.ready = 'true';
+
+      var form = root.querySelector('[data-sf-form]');
+      var itemsBody = root.querySelector('[data-sf-items]');
+      var rowTemplate = root.querySelector('[data-sf-row-template]');
+      var status = root.querySelector('[data-sf-status]');
+      var storageKey = 'secretFixInvoiceDraftV2';
+      var money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      var fixedTaxRate = 7.9;
+      var signaturePads = {};
+      var printStage = null;
+      var previousDocumentTitle = null;
+      var printTitleTimer = null;
+      var pdfLibraryPromise = null;
+      var printPreviewMode = /(?:^|[?&])sfPrintPreview=1(?:&|$)/.test(window.location.search);
+
+      function numberValue(value) {
+        var parsed = parseFloat(value);
+        return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+      }
+
+      function localDateString(date) {
+        var offset = date.getTimezoneOffset();
+        return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 10);
+      }
+
+      function setStatus(message, isError) {
+        status.textContent = message;
+        status.style.color = isError ? '#ff9d9d' : '#a8e4b8';
+        window.clearTimeout(setStatus.timer);
+        setStatus.timer = window.setTimeout(function () {
+          status.textContent = '';
+        }, 9000);
+      }
+
+      function createInvoiceNumber() {
+        return String(new Date().getFullYear()) + '-12345';
+      }
+
+      function currentInvoiceNumber() {
+        var invoiceNumber = String(form.elements.invoiceNumber.value || '').trim();
+        if (!invoiceNumber) {
+          invoiceNumber = createInvoiceNumber();
+          form.elements.invoiceNumber.value = invoiceNumber;
+        }
+        return invoiceNumber;
+      }
+
+      function renderEmptyState() {
+        if (itemsBody.querySelector('[data-sf-line-item]')) return;
+        itemsBody.innerHTML = '';
+        var row = document.createElement('tr');
+        row.className = 'sf-empty-row';
+        row.innerHTML = '<td colspan="7">No services added yet. Select “+ Add line item” to begin.</td>';
+        itemsBody.appendChild(row);
+      }
+
+      function removeEmptyState() {
+        var emptyRow = itemsBody.querySelector('.sf-empty-row');
+        if (emptyRow) emptyRow.remove();
+      }
+
+      function addRow(data) {
+        removeEmptyState();
+        var fragment = rowTemplate.content.cloneNode(true);
+        var row = fragment.querySelector('tr');
+        var values = data || {};
+        row.setAttribute('data-sf-line-item', '');
+        row.querySelector('[data-sf-description]').value = values.description || '';
+        row.querySelector('[data-sf-quantity]').value = values.quantity == null ? 1 : values.quantity;
+        row.querySelector('[data-sf-unit-price]').value = values.unitPrice == null ? '' : values.unitPrice;
+        row.querySelector('[data-sf-hours]').value = values.hours == null ? 1 : values.hours;
+        row.querySelector('[data-sf-labor-cost]').value = values.laborCost == null ? (values.price == null ? '' : values.price) : values.laborCost;
+        itemsBody.appendChild(fragment);
+        recalculate();
+      }
+
+      function recalculate() {
+        var subtotal = 0;
+        var rows = itemsBody.querySelectorAll('[data-sf-line-item]');
+
+        rows.forEach(function (row) {
+          var quantity = numberValue(row.querySelector('[data-sf-quantity]').value);
+          var unitPrice = numberValue(row.querySelector('[data-sf-unit-price]').value);
+          var laborHours = numberValue(row.querySelector('[data-sf-hours]').value);
+          var laborCost = numberValue(row.querySelector('[data-sf-labor-cost]').value);
+          var total = (quantity * unitPrice) + (laborHours * laborCost);
+          subtotal += total;
+          row.querySelector('[data-sf-row-total]').textContent = money.format(total);
+        });
+
+        var supplies = numberValue(form.elements.shopSupplies.value);
+        var discount = numberValue(form.elements.discount.value);
+        var taxTotal = subtotal * fixedTaxRate / 100;
+        var grandTotal = Math.max(0, subtotal + taxTotal + supplies - discount);
+
+        root.querySelector('[data-sf-subtotal]').textContent = money.format(subtotal);
+        root.querySelector('[data-sf-tax-total]').textContent = money.format(taxTotal);
+        root.querySelector('[data-sf-grand-total]').textContent = money.format(grandTotal);
+        root.querySelector('[data-sf-item-count]').textContent = rows.length + (rows.length === 1 ? ' item' : ' items');
+        return { subtotal: subtotal, tax: taxTotal, grandTotal: grandTotal };
+      }
+
+      function initializeDefaults() {
+        var today = new Date();
+        var due = new Date(today);
+        due.setDate(due.getDate() + 7);
+
+        form.elements.invoiceNumber.value = createInvoiceNumber();
+        form.elements.invoiceDate.value = localDateString(today);
+        form.elements.dueDate.value = localDateString(due);
+        form.elements.taxRate.value = String(fixedTaxRate);
+        form.elements.customerSignatureDate.value = '';
+        form.elements.technicianSignatureDate.value = localDateString(today);
+      }
+
+      function saveDraft(showConfirmation) {
+        var fields = {};
+        Array.from(form.elements).forEach(function (element) {
+          if (!element.name || element.type === 'file' || element.type === 'button' || element.type === 'submit') return;
+          fields[element.name] = element.type === 'checkbox' ? element.checked : element.value;
+        });
+        var rows = Array.from(itemsBody.querySelectorAll('[data-sf-line-item]')).map(function (row) {
+          return {
+            description: row.querySelector('[data-sf-description]').value,
+            quantity: row.querySelector('[data-sf-quantity]').value,
+            unitPrice: row.querySelector('[data-sf-unit-price]').value,
+            hours: row.querySelector('[data-sf-hours]').value,
+            laborCost: row.querySelector('[data-sf-labor-cost]').value
+          };
+        });
+        var signatures = {};
+        Object.keys(signaturePads).forEach(function (key) {
+          signatures[key] = signaturePads[key].toDataURL();
+        });
+        try {
+          localStorage.setItem(storageKey, JSON.stringify({ fields: fields, rows: rows, signatures: signatures }));
+          if (showConfirmation) setStatus('Draft saved on this device.');
+          return true;
+        } catch (error) {
+          if (showConfirmation) setStatus('This draft could not be saved on this device.', true);
+          return false;
+        }
+      }
+
+      function scheduleDraftSave() {
+        window.clearTimeout(scheduleDraftSave.timer);
+        scheduleDraftSave.timer = window.setTimeout(function () { saveDraft(false); }, 450);
+      }
+
+      function populateYears() {
+        var select = form.elements.vehicleYear;
+        var currentYear = new Date().getFullYear() + 1;
+        for (var year = currentYear; year >= 1990; year -= 1) {
+          var option = document.createElement('option');
+          option.value = String(year);
+          option.textContent = String(year);
+          select.appendChild(option);
+        }
+      }
+
+      function updateVinCount() {
+        var vin = form.elements.vin;
+        vin.value = vin.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g, '').slice(0, 17);
+        root.querySelector('[data-sf-vin-count]').textContent = vin.value.length + ' / 17';
+      }
+
+      function updateFileDisplay(input) {
+        var control = input.closest('.sf-photo-control');
+        var meta = control.querySelector('[data-sf-file-meta]');
+        var filename = control.querySelector('[data-sf-file-name]');
+        var file = input.files && input.files[0];
+
+        if (file) {
+          filename.textContent = file.name;
+          meta.hidden = false;
+        } else {
+          filename.textContent = '';
+          meta.hidden = true;
+        }
+      }
+
+      function clearFileDisplays() {
+        root.querySelectorAll('[data-sf-file-input]').forEach(function (input) {
+          input.value = '';
+          updateFileDisplay(input);
+        });
+      }
+
+      function restoreForm(data) {
+        if (!data || !data.fields) return false;
+        Object.keys(data.fields).forEach(function (name) {
+          var element = form.elements[name];
+          if (!element) return;
+          if (element.type === 'checkbox') element.checked = Boolean(data.fields[name]);
+          else element.value = data.fields[name];
+        });
+        form.elements.taxRate.value = String(fixedTaxRate);
+
+        itemsBody.innerHTML = '';
+        var savedRows = Array.isArray(data.rows) ? data.rows.filter(function (row) {
+          return row && (String(row.description || '').trim() || numberValue(row.unitPrice) || numberValue(row.laborCost) || numberValue(row.price) || numberValue(row.hours));
+        }) : [];
+        savedRows.forEach(addRow);
+        renderEmptyState();
+        updateVinCount();
+        recalculate();
+
+        window.requestAnimationFrame(function () {
+          if (data.signatures) {
+            if (data.signatures.customer) signaturePads.customer.fromDataURL(data.signatures.customer);
+            if (data.signatures.technician) signaturePads.technician.fromDataURL(data.signatures.technician);
+          }
+        });
+        return true;
+      }
+
+      function makeSignaturePad(canvas) {
+        var context = canvas.getContext('2d');
+        var drawing = false;
+        var lastPoint = null;
+
+        function resize() {
+          var saved = canvas.width ? canvas.toDataURL() : '';
+          var rect = canvas.getBoundingClientRect();
+          var ratio = Math.max(1, window.devicePixelRatio || 1);
+          canvas.width = Math.round(rect.width * ratio);
+          canvas.height = Math.round(rect.height * ratio);
+          context.setTransform(ratio, 0, 0, ratio, 0, 0);
+          context.strokeStyle = '#ff2525';
+          context.lineWidth = 2.2;
+          context.lineCap = 'round';
+          context.lineJoin = 'round';
+          if (saved) fromDataURL(saved);
+        }
+
+        function point(event) {
+          var rect = canvas.getBoundingClientRect();
+          return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        }
+
+        function start(event) {
+          drawing = true;
+          lastPoint = point(event);
+          canvas.setPointerCapture(event.pointerId);
+        }
+
+        function move(event) {
+          if (!drawing) return;
+          var next = point(event);
+          context.beginPath();
+          context.moveTo(lastPoint.x, lastPoint.y);
+          context.lineTo(next.x, next.y);
+          context.stroke();
+          lastPoint = next;
+        }
+
+        function stop() {
+          if (drawing) scheduleDraftSave();
+          drawing = false;
+          lastPoint = null;
+        }
+
+        function clear() {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function toDataURL() {
+          return canvas.toDataURL('image/png');
+        }
+
+        function fromDataURL(url) {
+          if (!url) return;
+          var image = new Image();
+          image.onload = function () {
+            var rect = canvas.getBoundingClientRect();
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, rect.width, rect.height);
+          };
+          image.src = url;
+        }
+
+        canvas.addEventListener('pointerdown', start);
+        canvas.addEventListener('pointermove', move);
+        canvas.addEventListener('pointerup', stop);
+        canvas.addEventListener('pointercancel', stop);
+        resize();
+
+        return { resize: resize, clear: clear, toDataURL: toDataURL, fromDataURL: fromDataURL };
+      }
+
+      function cleanupPrintStage(force) {
+        if (printPreviewMode && !force) return;
+        if (printStage && printStage.parentNode) printStage.parentNode.removeChild(printStage);
+        printStage = null;
+        document.body.classList.remove('sf-print-preview');
+      }
+
+      function buildPrintStage() {
+        cleanupPrintStage(true);
+        recalculate();
+
+        var stage = document.createElement('div');
+        stage.id = 'sf-print-stage';
+        stage.setAttribute('aria-hidden', 'true');
+
+        var sheet = root.cloneNode(true);
+        sheet.classList.add('sf-print-sheet');
+        sheet.removeAttribute('data-ready');
+        sheet.querySelectorAll('style, script, template').forEach(function (element) {
+          element.remove();
+        });
+
+        var originalControls = Array.from(root.querySelectorAll('input, select, textarea'));
+        var printControls = Array.from(sheet.querySelectorAll('input, select, textarea'));
+
+        originalControls.forEach(function (source, index) {
+          var target = printControls[index];
+          if (!target) return;
+
+          if (source.tagName === 'TEXTAREA') {
+            var text = document.createElement('div');
+            text.className = 'sf-print-textarea';
+            text.textContent = source.value || '\u00a0';
+            if (target.id) text.id = target.id;
+            target.replaceWith(text);
+            return;
+          }
+
+          if (source.type === 'checkbox') {
+            target.checked = source.checked;
+          } else if (source.type !== 'file') {
+            target.value = source.value;
+          }
+        });
+
+        var originalCanvases = Array.from(root.querySelectorAll('[data-sf-signature]'));
+        var printCanvases = Array.from(sheet.querySelectorAll('[data-sf-signature]'));
+        originalCanvases.forEach(function (canvas, index) {
+          var targetCanvas = printCanvases[index];
+          if (!targetCanvas) return;
+          var image = document.createElement('img');
+          image.className = 'sf-print-signature-image';
+          image.alt = canvas.getAttribute('aria-label') || 'Signature';
+          image.src = canvas.toDataURL('image/png');
+          targetCanvas.replaceWith(image);
+        });
+
+        stage.appendChild(sheet);
+        document.body.appendChild(stage);
+
+        var contentWidth = Math.max(1120, sheet.scrollWidth);
+        var contentHeight = Math.max(1, sheet.scrollHeight);
+        var availableWidth = 768;
+        var availableHeight = 1008;
+        var scale = Math.min(1, availableWidth / contentWidth, availableHeight / contentHeight) * 0.985;
+
+        stage.style.setProperty('--sf-print-scale', scale.toFixed(4));
+        stage.dataset.printScale = scale.toFixed(4);
+        stage.dataset.contentWidth = String(Math.ceil(contentWidth));
+        stage.dataset.contentHeight = String(Math.ceil(contentHeight));
+        printStage = stage;
+        return stage;
+      }
+
+      function printInvoice(mode) {
+        var stage = buildPrintStage();
+        if (mode === 'pdf') {
+          var invoiceNumber = currentInvoiceNumber();
+          if (previousDocumentTitle === null) previousDocumentTitle = document.title;
+          document.title = safeInvoiceFilename(invoiceNumber).replace(/\.pdf$/i, '');
+          window.clearTimeout(printTitleTimer);
+          printTitleTimer = window.setTimeout(restoreDocumentTitle, 60000);
+          setStatus('Choose "Save as PDF". The filename will use invoice number ' + invoiceNumber + '.');
+        } else {
+          setStatus('Preparing a one-page Letter printout.');
+        }
+        stage.getBoundingClientRect();
+        window.print();
+      }
+
+      function safeInvoiceFilename(invoice) {
+        var clean = String(invoice || createInvoiceNumber()).replace(/[^a-z0-9_-]+/gi, '-').replace(/^-+|-+$/g, '');
+        return (clean || createInvoiceNumber()) + '.pdf';
+      }
+
+      function restoreDocumentTitle() {
+        window.clearTimeout(printTitleTimer);
+        printTitleTimer = null;
+        if (previousDocumentTitle !== null) {
+          document.title = previousDocumentTitle;
+          previousDocumentTitle = null;
+        }
+      }
+
+      function loadScriptOnce(src, ready) {
+        if (ready()) return Promise.resolve();
+        return new Promise(function (resolve, reject) {
+          var existing = Array.from(document.scripts).find(function (script) { return script.src === src; });
+          var script = existing || document.createElement('script');
+          var timer = window.setTimeout(function () {
+            reject(new Error('PDF library loading timed out.'));
+          }, 15000);
+
+          function finish() {
+            window.clearTimeout(timer);
+            if (ready()) resolve();
+            else reject(new Error('PDF library did not initialize.'));
+          }
+
+          function fail() {
+            window.clearTimeout(timer);
+            reject(new Error('PDF library could not be loaded.'));
+          }
+
+          script.addEventListener('load', finish, { once: true });
+          script.addEventListener('error', fail, { once: true });
+          if (!existing) {
+            script.src = src;
+            script.async = true;
+            script.crossOrigin = 'anonymous';
+            document.head.appendChild(script);
+          }
+        });
+      }
+
+      function ensurePdfLibraries() {
+        if (pdfLibraryPromise) return pdfLibraryPromise;
+        pdfLibraryPromise = loadScriptOnce(
+          'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+          function () { return typeof window.html2canvas === 'function'; }
+        ).then(function () {
+          return loadScriptOnce(
+            'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+            function () { return Boolean(window.jspdf && window.jspdf.jsPDF); }
+          );
+        }).catch(function (error) {
+          pdfLibraryPromise = null;
+          throw error;
+        });
+        return pdfLibraryPromise;
+      }
+
+      function createInvoicePdf(invoice) {
+        setStatus('Preparing the invoice PDF…');
+        return ensurePdfLibraries().then(function () {
+          var stage = buildPrintStage();
+          stage.style.visibility = 'visible';
+          return window.html2canvas(stage, {
+            width: 768,
+            height: 1008,
+            scale: 2,
+            backgroundColor: '#020203',
+            useCORS: true,
+            allowTaint: false,
+            logging: false
+          }).then(function (canvas) {
+            var PdfDocument = window.jspdf.jsPDF;
+            var documentPdf = new PdfDocument({ orientation: 'portrait', unit: 'pt', format: 'letter', compress: true });
+            var pageWidth = documentPdf.internal.pageSize.getWidth();
+            var pageHeight = documentPdf.internal.pageSize.getHeight();
+            var scale = Math.min(pageWidth / canvas.width, pageHeight / canvas.height);
+            var imageWidth = canvas.width * scale;
+            var imageHeight = canvas.height * scale;
+            documentPdf.addImage(
+              canvas.toDataURL('image/jpeg', 0.93),
+              'JPEG',
+              (pageWidth - imageWidth) / 2,
+              (pageHeight - imageHeight) / 2,
+              imageWidth,
+              imageHeight,
+              undefined,
+              'FAST'
+            );
+            var blob = documentPdf.output('blob');
+            var filename = safeInvoiceFilename(invoice);
+            var file = typeof File === 'function' ? new File([blob], filename, { type: 'application/pdf' }) : null;
+            cleanupPrintStage(true);
+            return { blob: blob, file: file, filename: filename };
+          }).catch(function (error) {
+            cleanupPrintStage(true);
+            throw error;
+          });
+        });
+      }
+
+      function downloadPdf(blob, filename) {
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(function () { URL.revokeObjectURL(url); }, 3000);
+      }
+
+      function collectPhotoFiles() {
+        var photoNames = {
+          'sf-license-photo': 'Driver-License',
+          'sf-vin-photo': 'VIN',
+          'sf-mileage-photo': 'Mileage'
+        };
+        var files = [];
+        root.querySelectorAll('[data-sf-file-input]').forEach(function (input) {
+          Array.from(input.files || []).forEach(function (file) {
+            var extensionMatch = file.name.match(/\.[a-z0-9]+$/i);
+            var extension = extensionMatch ? extensionMatch[0] : '';
+            var friendlyName = (photoNames[input.id] || 'Invoice-Photo') + extension;
+            try {
+              files.push(new File([file], friendlyName, { type: file.type, lastModified: file.lastModified }));
+            } catch (error) {
+              files.push(file);
+            }
+          });
+        });
+        return files;
+      }
+
+      function isIOSDevice() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      }
+
+      function openGmailDraft(recipient, subject, body) {
+        var link = document.createElement('a');
+        link.href = 'https://mail.google.com/mail/?view=cm&fs=1' +
+          '&to=' + encodeURIComponent(recipient) +
+          '&su=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
+        link.target = '_top';
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+
+      function shareInvoice() {
+        var emailInput = form.elements.email;
+        var recipient = emailInput.value.trim();
+        if (!recipient || !emailInput.checkValidity()) {
+          setStatus('Enter a valid customer email before sending.', true);
+          emailInput.focus();
+          return;
+        }
+
+        var totals = recalculate();
+        var customer = form.elements.customerName.value || 'Customer';
+        var invoice = currentInvoiceNumber();
+        var vehicle = [
+          form.elements.vehicleYear.value,
+          form.elements.vehicleMake.value,
+          form.elements.vehicleModel.value
+        ].filter(Boolean).join(' ');
+        var subject = 'Secret Fix invoice ' + invoice;
+        var summary = [
+          'Secret Fix Mobile Mechanic',
+          invoice + ' for ' + customer,
+          vehicle ? 'Vehicle: ' + vehicle : '',
+          'Amount due: ' + money.format(totals.grandTotal),
+          'Due date: ' + (form.elements.dueDate.value || 'Upon receipt'),
+          '',
+          'Please contact 480-410-8488 or Support@secretfix.net with any questions.'
+        ].filter(function (line) { return line !== ''; }).join('\n');
+        var sendButton = root.querySelector('[data-sf-send]');
+        var photoFiles = collectPhotoFiles();
+        var photoSummary = photoFiles.length === 1 ? '1 selected photo' : photoFiles.length + ' selected photos';
+
+        sendButton.disabled = true;
+        sendButton.setAttribute('aria-busy', 'true');
+        createInvoicePdf(invoice).then(function (pdf) {
+          var shareFiles = pdf.file ? [pdf.file].concat(photoFiles) : photoFiles.slice();
+          var canShareFiles = false;
+          if (pdf.file && navigator.share && navigator.canShare) {
+            try {
+              canShareFiles = navigator.canShare({ files: shareFiles });
+            } catch (error) {
+              canShareFiles = false;
+            }
+          }
+
+          if (canShareFiles) {
+            setStatus('Opening the iPhone share sheet with the PDF and ' + photoSummary + '. Choose Gmail, then confirm the recipient: ' + recipient);
+            return navigator.share({
+              files: shareFiles,
+              title: subject,
+              text: 'Gmail recipient: ' + recipient + '\n\n' + summary
+            }).then(function () {
+              setStatus('Invoice PDF and ' + photoSummary + ' shared successfully.');
+            }).catch(function (error) {
+              if (error && error.name === 'AbortError') {
+                setStatus('Sharing canceled. No email was sent.');
+                return;
+              }
+              downloadPdf(pdf.blob, pdf.filename);
+              setStatus('The PDF was downloaded. Opening Gmail to ' + recipient + '; attach ' + pdf.filename + ' and the selected photos manually.');
+              window.setTimeout(function () { openGmailDraft(recipient, subject, summary); }, 350);
+            });
+          }
+
+          downloadPdf(pdf.blob, pdf.filename);
+          setStatus((isIOSDevice() ? 'iPhone file sharing is unavailable here. ' : '') + 'The PDF was downloaded. Opening Gmail to ' + recipient + '; attach ' + pdf.filename + ' and the selected photos manually.');
+          window.setTimeout(function () { openGmailDraft(recipient, subject, summary); }, 350);
+          return null;
+        }).catch(function () {
+          var canSharePhotos = false;
+          if (photoFiles.length && navigator.share && navigator.canShare) {
+            try {
+              canSharePhotos = navigator.canShare({ files: photoFiles });
+            } catch (error) {
+              canSharePhotos = false;
+            }
+          }
+          if (canSharePhotos) {
+            setStatus('The PDF could not be created, but the photos are ready. Choose Gmail in the share sheet and confirm the recipient: ' + recipient, true);
+            return navigator.share({
+              files: photoFiles,
+              title: subject,
+              text: 'Gmail recipient: ' + recipient + '\n\n' + summary
+            });
+          }
+          setStatus('An attachable PDF could not be created. Opening Gmail; use Export PDF and attach the PDF and photos manually.', true);
+          openGmailDraft(recipient, subject, summary + '\n\nUse Export PDF on the invoice page, then attach the saved PDF and selected photos.');
+          return null;
+        }).then(function () {
+          sendButton.disabled = false;
+          sendButton.removeAttribute('aria-busy');
+        }, function (error) {
+          sendButton.disabled = false;
+          sendButton.removeAttribute('aria-busy');
+          if (error && error.name === 'AbortError') {
+            setStatus('Sharing canceled. No email was sent.');
+            return;
+          }
+          setStatus('File sharing could not finish. Opening Gmail; attach the PDF and photos manually.', true);
+          openGmailDraft(recipient, subject, summary);
+        });
+      }
+
+      function clearInvoice() {
+        form.reset();
+        try {
+          localStorage.removeItem(storageKey);
+        } catch (error) {
+          /* Storage may be unavailable inside a restricted embed. */
+        }
+        itemsBody.innerHTML = '';
+        renderEmptyState();
+        initializeDefaults();
+        updateVinCount();
+        clearFileDisplays();
+        signaturePads.customer.clear();
+        signaturePads.technician.clear();
+        recalculate();
+        setStatus('Invoice cleared.');
+      }
+
+      root.querySelectorAll('[data-sf-signature]').forEach(function (canvas) {
+        signaturePads[canvas.getAttribute('data-sf-signature')] = makeSignaturePad(canvas);
+      });
+
+      root.querySelectorAll('[data-sf-clear-signature]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          signaturePads[button.getAttribute('data-sf-clear-signature')].clear();
+        });
+      });
+
+      root.querySelectorAll('[data-sf-file-input]').forEach(function (input) {
+        input.addEventListener('change', function () {
+          updateFileDisplay(input);
+        });
+      });
+
+      root.querySelector('[data-sf-add-row]').addEventListener('click', function () {
+        addRow();
+        scheduleDraftSave();
+        var rows = itemsBody.querySelectorAll('[data-sf-line-item]');
+        rows[rows.length - 1].querySelector('[data-sf-description]').focus();
+      });
+
+      itemsBody.addEventListener('click', function (event) {
+        var quantityButton = event.target.closest('[data-sf-qty-decrease], [data-sf-qty-increase]');
+        if (quantityButton) {
+          var quantityInput = quantityButton.closest('tr').querySelector('[data-sf-quantity]');
+          var currentQuantity = Math.max(1, Math.round(numberValue(quantityInput.value) || 1));
+          var nextQuantity = quantityButton.hasAttribute('data-sf-qty-increase') ? currentQuantity + 1 : Math.max(1, currentQuantity - 1);
+          quantityInput.value = String(nextQuantity);
+          recalculate();
+          return;
+        }
+
+        var hoursButton = event.target.closest('[data-sf-hours-decrease], [data-sf-hours-increase]');
+        if (hoursButton) {
+          var hoursInput = hoursButton.closest('tr').querySelector('[data-sf-hours]');
+          var currentHours = numberValue(hoursInput.value);
+          var nextHours = hoursButton.hasAttribute('data-sf-hours-increase') ? currentHours + 0.5 : Math.max(0, currentHours - 0.5);
+          hoursInput.value = String(Math.round(nextHours * 100) / 100);
+          recalculate();
+          return;
+        }
+
+        var button = event.target.closest('[data-sf-remove-row]');
+        if (!button) return;
+        button.closest('tr').remove();
+        renderEmptyState();
+        recalculate();
+        scheduleDraftSave();
+      });
+
+      form.addEventListener('input', function (event) {
+        if (event.target === form.elements.vin) updateVinCount();
+        recalculate();
+        scheduleDraftSave();
+      });
+
+      form.addEventListener('change', function (event) {
+        if (event.target.matches('[data-sf-quantity]')) {
+          event.target.value = String(Math.max(1, Math.round(numberValue(event.target.value) || 1)));
+          recalculate();
+        }
+        if (event.target.matches('[data-sf-hours]')) {
+          event.target.value = String(Math.round(numberValue(event.target.value) * 2) / 2);
+          recalculate();
+        }
+      });
+
+      root.querySelector('[data-sf-pdf]').addEventListener('click', function () { printInvoice('pdf'); });
+      root.querySelector('[data-sf-save]').addEventListener('click', function () { saveDraft(true); });
+      root.querySelector('[data-sf-send]').addEventListener('click', shareInvoice);
+      root.querySelector('[data-sf-clear]').addEventListener('click', clearInvoice);
+
+      window.addEventListener('beforeprint', function () {
+        if (!document.getElementById('sf-print-stage')) buildPrintStage();
+      });
+
+      window.addEventListener('afterprint', function () {
+        restoreDocumentTitle();
+        window.setTimeout(function () { cleanupPrintStage(false); }, 120);
+      });
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(function () {
+          Object.keys(signaturePads).forEach(function (key) { signaturePads[key].resize(); });
+        }, 180);
+      });
+
+      populateYears();
+      initializeDefaults();
+      renderEmptyState();
+      updateVinCount();
+
+      try {
+        var saved = localStorage.getItem(storageKey);
+        if (saved) {
+          restoreForm(JSON.parse(saved));
+          setStatus('Saved draft restored.');
+        }
+      } catch (error) {
+        setStatus('Saved draft could not be restored.', true);
+      }
+
+      recalculate();
+
+      if (printPreviewMode) {
+        window.setTimeout(function () {
+          buildPrintStage();
+          document.body.classList.add('sf-print-preview');
+        }, 120);
+      }
+    }());
+  </script>
+</div>
+<script>
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('./service-worker.js').catch(function () {});
+    });
+  }
+</script>
+</body>
+</html>
