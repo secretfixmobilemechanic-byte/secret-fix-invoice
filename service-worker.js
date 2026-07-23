@@ -1,4 +1,4 @@
-const CACHE_NAME = 'secret-fix-invoice-v2';
+﻿const CACHE_NAME = 'secret-fix-invoice-v2';
 const APP_FILES = [
   './',
   './index.html',
@@ -38,3 +38,4 @@ self.addEventListener('fetch', event => {
     })
   );
 });
+

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -2066,7 +2066,7 @@
         itemsBody.innerHTML = '';
         var row = document.createElement('tr');
         row.className = 'sf-empty-row';
-        row.innerHTML = '<td colspan="7">No services added yet. Select “+ Add line item” to begin.</td>';
+        row.innerHTML = '<td colspan="7">No services added yet. Select â€œ+ Add line itemâ€ to begin.</td>';
         itemsBody.appendChild(row);
       }
 
@@ -2457,7 +2457,7 @@
       }
 
       function createInvoicePdf(invoice) {
-        setStatus('Preparing the invoice PDF…');
+        setStatus('Preparing the invoice PDFâ€¦');
         return ensurePdfLibraries().then(function () {
           var stage = buildPrintStage();
           stage.style.visibility = 'visible';
@@ -2796,3 +2796,4 @@
 </script>
 </body>
 </html>
+
