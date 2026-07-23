@@ -1,11 +1,11 @@
-const CACHE_NAME = 'secret-fix-invoice-v1';
+const CACHE_NAME = 'secret-fix-invoice-v2';
 const APP_FILES = [
   './',
   './index.html',
   './manifest.webmanifest',
   './app-icon.png',
-  './secret-fix-assets/secret-fix-logo.png',
-  './secret-fix-assets/secret-fix-skull.png'
+  './secret-fix-logo.png',
+  './secret-fix-skull.png'
 ];
 
 self.addEventListener('install', event => {
