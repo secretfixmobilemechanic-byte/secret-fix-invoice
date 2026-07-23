@@ -1,0 +1,47 @@
+SECRET FIX INVOICE MAKER — IPHONE INSTALLATION
+================================================
+
+This app is free and does not require a subscription. Invoice data stays in
+Safari storage on the iPhone unless you share or email it.
+
+IMPORTANT: Apple requires a PWA to be opened from a secure website before it
+can be installed. Opening index.html directly from the Files app will show the
+invoice maker, but iOS will not install it or enable its offline cache.
+
+INSTALL FROM SAFARI
+-------------------
+1. Upload the complete Secret-Fix-Invoice-PWA folder to any HTTPS static host.
+   Free choices include GitHub Pages, Cloudflare Pages, or Netlify Drop.
+2. Open the resulting HTTPS address in Safari on the iPhone.
+3. Wait for the full invoice page to load once.
+4. Tap Safari's Share button (the square with the upward arrow).
+5. Scroll down and tap "Add to Home Screen," then tap "Add."
+6. Open Secret Fix from the new Home Screen icon.
+7. To verify offline use, open it once, turn on Airplane Mode, and reopen it.
+
+SAVING AN INVOICE
+-----------------
+- Changes are saved automatically on that iPhone after you edit a field.
+- Tap "Save Draft" for an immediate confirmation.
+- The current draft returns when the app is reopened.
+- Photos selected from the camera are not kept after the app closes; this is an
+  iPhone privacy restriction. The invoice fields and signatures are retained.
+- Tap "Clear" only when you want to erase the saved draft and start over.
+
+SAVE OR PRINT A PDF OFFLINE ON IPHONE
+-------------------------------------
+1. Open the invoice and tap "Export PDF."
+2. On the iOS print screen, place two fingers on the invoice preview and spread
+   them apart (pinch outward). This opens the preview as a PDF.
+3. Tap Share.
+4. Choose "Save to Files" to keep the PDF, "Print" to print it, or choose an app
+   such as Mail/Gmail to send it.
+
+The PDF/print flow works offline. Sending through Gmail requires an internet
+connection. If "Send via Gmail" cannot prepare an attachment while offline,
+use Export PDF first and attach the saved PDF after reconnecting.
+
+BACKUP NOTE
+-----------
+Safari can erase website data if the app is removed or browser data is cleared.
+Save completed invoices as PDFs in Files for permanent records.

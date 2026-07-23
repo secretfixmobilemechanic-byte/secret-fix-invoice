@@ -1,0 +1,20 @@
+{
+  "name": "Secret Fix Invoice Maker",
+  "short_name": "Secret Fix",
+  "description": "Free offline invoice maker for Secret Fix Mobile Mechanic.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#020203",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "app-icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
